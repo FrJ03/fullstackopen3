@@ -33,6 +33,17 @@ app.get('/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${now.toString()}</p>`)
 })
 
+app.get('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  let person = {id: -1}
+  for(let i = 0 ; i < persons.length && person.id == -1; i++){
+    if(persons[i].id == id){
+      person = persons[i]
+    }
+  }
+  person.id == -1 ? response.sendStatus(404) : response.send(person)
+})
+
 const PORT = 3001
 
 app.listen(PORT, () => {
