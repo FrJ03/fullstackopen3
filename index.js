@@ -26,6 +26,15 @@ let persons = [
     }
 ]
 
+const existPerson = (name) => {
+  for(let i = 0 ; i < persons.length ; i++){
+    if(persons[i].name == name){
+      return true
+    }
+  }
+  return false
+}
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
@@ -64,14 +73,19 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   console.log(request.body)
-  const person = {
-    id: `${Math.floor(Math.random() * 1000000000000)}`,
-    name: request.body.name,
-    number: request.body.number
+  if(request.body.name == '' || request.body.number == '' || existPerson(request.body.name)){
+    response.send({ error: 'name must be unique' })
   }
-  persons.push(person)
+  else{
+    const person = {
+      id: `${Math.floor(Math.random() * 1000000000000)}`,
+      name: request.body.name,
+      number: request.body.number
+    }
+    persons.push(person)
 
-  response.sendStatus(200)
+    response.sendStatus(200)
+  }
 })
 
 const PORT = 3001
