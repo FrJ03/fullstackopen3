@@ -113,14 +113,16 @@ app.post('/api/persons', (request, response) => {
     response.send({ error: 'name must be unique' })
   }
   else{
-    const person = {
-      id: `${Math.floor(Math.random() * 1000000000000)}`,
+    const person = new PhoneNumber({
       name: request.body.name,
       number: request.body.number
-    }
-    persons.push(person)
+    })
 
-    response.sendStatus(200)
+    person
+      .save()
+      .then(res => {
+        response.sendStatus(200)
+      })
   }
 })
 
