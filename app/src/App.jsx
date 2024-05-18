@@ -70,7 +70,6 @@ const App = () => {
       const newPerson = {
         name: name,
         number: newNumber,
-        id: `${parseInt(persons[persons.length - 1].id) + 1}`
       }
       personService.create(newPerson)
       const newPersons = persons.concat(newPerson)
@@ -88,7 +87,7 @@ const App = () => {
             const newPerson = {
               name: name,
               number: newNumber,
-              id: `${per.id}`
+              _id: `${per._id}`
             }
             personService.update(newPerson)
 

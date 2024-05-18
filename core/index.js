@@ -1,9 +1,8 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-
+const mongoose = require('mongoose')
 const app = express()
-
 
 morgan.token('data', req => 
   (req.method == 'POST') ? 
@@ -16,6 +15,26 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 app.use(express.static('dist'))
+
+const numberSchema = new mongoose.Schema({
+  name: String,
+  number: Number
+})
+
+const PhoneNumber = mongoose.model('Number', numberSchema)
+
+if(process.argv.length < 3){
+  console.log('USE: node mongo.js <password>')
+  process.exit(1)
+}
+
+const password = process.argv[2]
+const url =
+        `mongodb+srv://admin:${password}@fullstackopen.r1fwxdb.mongodb.net/?retryWrites=true&w=majority&appName=fullstackopen`
+
+mongoose.set('strictQuery', false)
+
+mongoose.connect(url)
 
 let persons = [
     { 
@@ -50,7 +69,11 @@ const existPerson = (name) => {
 }
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    PhoneNumber
+      .find({})
+      .then(phones => {
+        response.json(phones)
+      })
 })
 
 app.get('/info', (request, response) => {
