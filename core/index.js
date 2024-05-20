@@ -1,5 +1,5 @@
 require('dotenv').config()
-const errorHandler = require('errors/errorHandler')
+const {errorHandler} = require('./errors/errorHandler')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
