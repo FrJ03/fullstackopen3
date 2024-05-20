@@ -6,7 +6,16 @@ const numberSchema = new mongoose.Schema({
     minLength: 3,
     required: true
   },
-  number: Number
+  number: {
+    type: String,
+    minLength: 8,
+    validate:{
+      validator: function(number){
+        return /\d{2,3}-\d+/.test(number)
+      },
+      message: props => `${props.value} in not a valid phone number`
+    }
+  }
 })
 
 const PhoneNumber = mongoose.model('Number', numberSchema)
