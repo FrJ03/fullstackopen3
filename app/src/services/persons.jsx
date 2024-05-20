@@ -13,7 +13,7 @@ const create = newPerson => {
 }
 
 const deletePerson = person => {
-    const personUrl = `${baseUrl}/${person.id}`
+    const personUrl = `${baseUrl}/${person._id}`
     return axios
             .delete(personUrl)
             .then(response => response.data)

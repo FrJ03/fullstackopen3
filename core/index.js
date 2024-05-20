@@ -94,18 +94,11 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  let deleted = false
-  persons = persons.filter((person => {
-    if(person.id == id){
-      deleted = true
-      return false
-    }
-    else{
-      return true
-    }
-  }))
-
-  response.sendStatus(deleted ? 200 : 404)
+  PhoneNumber
+    .deleteOne({_id: id})
+    .then(res => {
+      response.sendStatus(200)
+    })
 })
 
 app.post('/api/persons', (request, response) => {
