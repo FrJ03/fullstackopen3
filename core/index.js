@@ -79,13 +79,12 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  let person = {id: -1}
-  for(let i = 0 ; i < persons.length && person.id == -1; i++){
-    if(persons[i].id == id){
-      person = persons[i]
-    }
-  }
-  person.id == -1 ? response.sendStatus(404) : response.send(person)
+  PhoneNumber
+    .findOne({_id: id})
+    .then(res => {
+      response.sendStatus(200)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -115,6 +114,12 @@ app.post('/api/persons', (request, response, next) => {
       })
       .catch(error => next(error))
   }
+})
+app.put('/api/persons/:id', (request, response, next) => {
+  PhoneNumber
+    .updateOne({_id: request.params.id}, {number: request.body.number})
+    .then(res => response.sendStatus(200))
+    .catch(error => next(error))
 })
 
 app.use(errorHandler)

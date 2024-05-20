@@ -20,7 +20,7 @@ const deletePerson = person => {
 }
 
 const update = person => {
-    const personUrl = `${baseUrl}/${person.id}`
+    const personUrl = `${baseUrl}/${person._id}`
     return axios
             .put(personUrl, person)
             .then(response => response.data)
