@@ -85,7 +85,7 @@ app.post('/api/persons', (request, response, next) => {
 })
 app.put('/api/persons/:id', (request, response, next) => {
   PhoneNumber
-    .updateOne({_id: request.params.id}, {number: request.body.number})
+    .updateOne({_id: request.params.id}, {number: request.body.number}, { runValidators: true})
     .then(res => response.sendStatus(200))
     .catch(error => next(error))
 })

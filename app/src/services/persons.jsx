@@ -24,6 +24,7 @@ const update = person => {
     return axios
             .put(personUrl, person)
             .then(response => response.data)
+            .catch(res => res.response.data)
 }
 
 const get = name => {

@@ -97,20 +97,27 @@ const App = () => {
               number: newNumber,
               _id: `${per._id}`
             }
-            personService.update(newPerson)
-
-            const pos = personFind(name, persons)
-            const posFiltered = personFind(name, personsFiltered)
-
-            const newPersonsList = [...persons]
-            newPersonsList[pos].number = newPerson.number
-            setPersons(newPersonsList)
-            if(posFiltered !== -1){
-              const newPersonsFilteredList = [...personsFiltered]
-              newPersonsFilteredList[pos].number = newPerson.number
-              setPersonsFiltered(newPersonsFilteredList)
-            }
-            setNotification({message: `Added ${newPerson.name}`, type: "success"})
+            personService
+              .update(newPerson)
+              .then(response => {
+                if(!response.error){
+                  const pos = personFind(name, persons)
+                  const posFiltered = personFind(name, personsFiltered)
+      
+                  const newPersonsList = [...persons]
+                  newPersonsList[pos].number = newPerson.number
+                  setPersons(newPersonsList)
+                  if(posFiltered !== -1){
+                    const newPersonsFilteredList = [...personsFiltered]
+                    newPersonsFilteredList[pos].number = newPerson.number
+                    setPersonsFiltered(newPersonsFilteredList)
+                  }
+                  setNotification({message: `Added ${newPerson.name}`, type: "success"})
+                }
+                else{
+                  setNotification({message: `${response.error}`, type: "error"})
+                }
+              })
         })
         .catch(erro => {
           setNotification({message: `Information about ${name} has already been removed from server`, type: "error"})
