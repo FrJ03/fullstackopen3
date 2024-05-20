@@ -71,12 +71,20 @@ const App = () => {
         name: name,
         number: newNumber,
       }
-      personService.create(newPerson)
-      const newPersons = persons.concat(newPerson)
-      setPersons(newPersons)
-      setFilter('')
-      setPersonsFiltered(newPersons)
-      setNotification({message: `Added ${newPerson.name}`, type: "success"})
+      personService
+        .create(newPerson)
+        .then(response => {
+          if(!response.error){
+            const newPersons = persons.concat(newPerson)
+            setPersons(newPersons)
+            setFilter('')
+            setPersonsFiltered(newPersons)
+            setNotification({message: `Added ${newPerson.name}`, type: "success"})
+          }
+          else{
+            setNotification({message: `${response.error}`, type: "error"})
+          }
+        })
     }
     else{
       if(window.confirm(`${name} is already added to phonebook, repalce the old number with a new one?`)){

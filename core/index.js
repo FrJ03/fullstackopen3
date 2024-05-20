@@ -1,5 +1,6 @@
 require('dotenv').config()
 const {errorHandler} = require('./errors/errorHandler')
+const { PhoneNumber } = require('./models/phoneNumber')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -17,13 +18,6 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 app.use(express.static('dist'))
-
-const numberSchema = new mongoose.Schema({
-  name: String,
-  number: Number
-})
-
-const PhoneNumber = mongoose.model('Number', numberSchema)
 
 const url = process.env.MONGODB_URL
 
@@ -72,7 +66,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.post('/api/persons', (request, response, next) => {
-  if(request.body.name == '' || request.body.number == '' || existPerson(request.body.name)){
+  if(request.body.name == '' || request.body.number == ''){
     response.send({ error: 'name must be unique' })
   }
   else{
@@ -98,7 +92,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.use(errorHandler)
 
-const PORT = 3001
+const PORT = 3002
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
