@@ -1,3 +1,5 @@
+require('dotenv').config()
+const errorHandler = require('errors/errorHandler')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -23,14 +25,7 @@ const numberSchema = new mongoose.Schema({
 
 const PhoneNumber = mongoose.model('Number', numberSchema)
 
-if(process.argv.length < 3){
-  console.log('USE: node mongo.js <password>')
-  process.exit(1)
-}
-
-const password = process.argv[2]
-const url =
-        `mongodb+srv://admin:${password}@fullstackopen.r1fwxdb.mongodb.net/?retryWrites=true&w=majority&appName=fullstackopen`
+const url = process.env.MONGODB_URL
 
 mongoose.set('strictQuery', false)
 
@@ -68,12 +63,13 @@ const existPerson = (name) => {
   return false
 }
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
     PhoneNumber
       .find({})
       .then(phones => {
         response.json(phones)
       })
+      .catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
@@ -92,16 +88,17 @@ app.get('/api/persons/:id', (request, response) => {
   person.id == -1 ? response.sendStatus(404) : response.send(person)
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   PhoneNumber
     .deleteOne({_id: id})
     .then(res => {
       response.sendStatus(200)
     })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   if(request.body.name == '' || request.body.number == '' || existPerson(request.body.name)){
     response.send({ error: 'name must be unique' })
   }
@@ -116,8 +113,11 @@ app.post('/api/persons', (request, response) => {
       .then(res => {
         response.sendStatus(200)
       })
+      .catch(error => next(error))
   }
 })
+
+app.use(errorHandler)
 
 const PORT = 3001
 
