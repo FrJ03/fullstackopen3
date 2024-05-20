@@ -45,7 +45,7 @@ app.get('/info', (request, response, next) => {
     
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   PhoneNumber
     .findOne({_id: id})
@@ -59,7 +59,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   PhoneNumber
     .deleteOne({_id: id})
-    .then(res => {
+    .then(() => {
       response.sendStatus(200)
     })
     .catch(error => next(error))
@@ -77,7 +77,7 @@ app.post('/api/persons', (request, response, next) => {
 
     person
       .save()
-      .then(res => {
+      .then(() => {
         response.sendStatus(200)
       })
       .catch(error => next(error))
@@ -86,7 +86,7 @@ app.post('/api/persons', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   PhoneNumber
     .updateOne({_id: request.params.id}, {number: request.body.number}, { runValidators: true})
-    .then(res => response.sendStatus(200))
+    .then(() => response.sendStatus(200))
     .catch(error => next(error))
 })
 

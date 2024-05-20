@@ -45,7 +45,7 @@ else if(process.argv.length >= 5){
 
     number
         .save()
-        .then(res => {
+        .then(() => {
             console.log(`added ${name} number ${phoneNumber} to phonebook`)
             mongoose.connection.close()
         })
